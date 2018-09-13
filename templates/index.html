@@ -8,14 +8,22 @@
         <input type="text" name="urlInput">
         <input type="submit">
     </form>
-    <br> http://www.arstechnica.com
-    <br> http://
-
+    <br> https://arstechnica.com
+    
     <br> Results:
-    <br> # of positive words:
-    <br> # of negative words:
-    <br> Raw result: {{ results }}
-    <br> errors: {{ errors }}
+    <br> # of positive sentence: {{ num_pos }}
+    <br> Most positive sentence: {{ most_pos }}
+    <br>
+    <br> # of negative words: {{ num_neg }}
+    <br> Most negative sentence: {{ most_neg }}
+    <br> Result: {{ results }}
+    <br> Errors: {{ errors }}
+    <br> A: {{ a }}
+    <br>
+    {{line_list}}
+    <br>---
+    <br>
+    {{sentences}}
 
 </body>
 
