@@ -8,23 +8,18 @@
         <input type="text" name="urlInput">
         <input type="submit">
     </form>
-    <br> https://arstechnica.com
-    
-    <br> Results:
-    <br> # of positive sentence: {{ num_pos }}
-    <br> Most positive sentence: {{ most_pos }}
+    <br> <b>Total:</b> {{ count_total }}
+    <br> <b># of positive:</b> {{ count_pos_comp }}
+    <br> <b>Most compound positive comment:</b> {% for key, value in most_positive_comp_reduced.items() %} {{ value }} {% endfor %}
+    <br> <b> Most comp pos full:</b> {{ most_positive_comp_full }}
+    <br> <b>Most positive:</b> {{ most_pos }}
     <br>
-    <br> # of negative words: {{ num_neg }}
-    <br> Most negative sentence: {{ most_neg }}
-    <br> Result: {{ results }}
-    <br> Errors: {{ errors }}
-    <br> A: {{ a }}
+    <br> <b># of negative:</b> {{ count_neg_comp }}
+    <br> <b>Most compound negative comment:</b> {% for key, value in most_negative_comp_reduced.items() %} {{ value }} {% endfor %}
+    <br> <b>Most comp neg full:</b> {{ most_negative_comp_full }}
+    <br> <b>Most negative:</b> {{ most_neg }}
+    <br> {% if errors %} ERROR: {{ errors }} {% endif %}
     <br>
-    {{line_list}}
-    <br>---
-    <br>
-    {{sentences}}
-
 </body>
 
 </html>
