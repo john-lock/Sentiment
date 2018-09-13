@@ -4,13 +4,19 @@
 </head>
 
 <body>
-	<form action="{{ url_for('scrape') }}" method="POST">
-		<input type="text" name="urlInput">
-		<input type="submit">
-	</form>
-	Results:
-	# of positive words:
-	# of negative words:
+    <form action="{{ url_for('scrape') }}" method="POST">
+        <input type="text" name="urlInput">
+        <input type="submit">
+    </form>
+    <br> http://www.arstechnica.com
+    <br> http://
+
+    <br> Results:
+    <br> # of positive words:
+    <br> # of negative words:
+    <br> Raw result: {{ results }}
+    <br> errors: {{ errors }}
+
 </body>
 
 </html>
