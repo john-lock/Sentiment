@@ -1,4 +1,3 @@
-
 import re
 from nltk import tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
@@ -13,13 +12,16 @@ app = Flask(__name__)
 def scrape():
     errors = []
     results = {}
+
     if request.method == "POST":
         try:
             url = request.form['urlInput']
             r = requests.get(url)
         except:
             errors.append("Unable to reach URL, please try again")
-            return render_template('index.html', errors=errors)
+            errors.append("URL attempted:" + url)
+            errors_str = '\n'.join(errors)
+            return render_template('index.html', errors=errors, url=url)
         if r:
             soup = BeautifulSoup(r.text, 'html.parser')
             for element in soup(['style', 'script', 'head', 'header', 'title', 'meta', 'footer']):
@@ -51,6 +53,8 @@ def scrape():
             count_pos_comp = len(count_pos)
             count_neg_comp = len(count_neg)
             count_total = len(data)
+            count_pos_perc = round(count_pos_comp / count_total * 100, 2)
+            count_neg_perc = round(count_neg_comp / count_total * 100, 2)
 
             # Most/Least values
             most_negative = sorted(data, key=lambda x: x['neg'])
@@ -74,4 +78,4 @@ def scrape():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=5001)

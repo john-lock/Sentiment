@@ -1,15 +1,36 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <form action="{{ url_for('scrape') }}" method="POST">
+
+<div class="container">
+    <div class="jumbotron">
+  <h2 class="display-4">Sentiment Analyser</h2>
+  <form action="{{ url_for('scrape') }}" method="POST">
         <input type="text" name="urlInput">
-        <input type="submit">
+        <button type="submit" class="btn btn-primary">Analyse</button>
     </form>
-    <br> <b>Total:</b> {{ count_total }}
+    {% if url %} URL requested: {{ url }} {% endif %}
+    {% if count_total %}
+    Analysis of: {{ url }}
+<hr class="my-2">
+<div class="progress">
+  <div class="progress-bar bg-success" style="width:{{ count_pos_perc }}%">
+    Positive - {{ count_pos_perc }}%
+  </div>
+  <div class="progress-bar bg-danger" style="width:{{ count_neg_perc }}%"> Negative - {{ count_neg_perc }}%
+</div>
+</div>
+
+  <br> <b>Total:</b> {{ count_total }}
     <br> <b># of positive:</b> {{ count_pos_comp }}
+
     <br> <b>Most compound positive comment:</b> {% for key, value in most_positive_comp_reduced.items() %} {{ value }} {% endfor %}
     <br> <b> Most comp pos full:</b> {{ most_positive_comp_full }}
     <br> <b>Most positive:</b> {{ most_pos }}
@@ -18,8 +39,21 @@
     <br> <b>Most compound negative comment:</b> {% for key, value in most_negative_comp_reduced.items() %} {{ value }} {% endfor %}
     <br> <b>Most comp neg full:</b> {{ most_negative_comp_full }}
     <br> <b>Most negative:</b> {{ most_neg }}
-    <br> {% if errors %} ERROR: {{ errors }} {% endif %}
-    <br>
+    
+    {% endif %}
+    <br> {% if errors %}
+    <div class="alert alert-warning" role="alert">
+  {{ errors }} 
+</div> {% endif %}
+</div>
+</div>
+    
+    <br> TODO:
+    <br> ?plot neg/neu/pos on chart per page -
+    <br> ?average n/n/p of lines per page
+    <br> Apply to Trek scripts (with better page scope) - can get info by character
+    <br> Set min word in sentence count
+    <br> save results to db, url + metrics (could check certain pages over time)
 </body>
 
 </html>
