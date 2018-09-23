@@ -12,7 +12,6 @@ app = Flask(__name__)
 def scrape():
     errors = []
     results = {}
-
     if request.method == "POST":
         try:
             url = request.form['urlInput']
@@ -23,31 +22,36 @@ def scrape():
             errors_str = '\n'.join(errors)
             return render_template('index.html', errors=errors, url=url)
         if r:
+            ###### Visible(r):
+            # Remove elements that are not visible on page as rendered to user
             soup = BeautifulSoup(r.text, 'html.parser')
             for element in soup(['style', 'script', 'head', 'header', 'title', 'meta', 'footer']):
                 element.extract()
             raw_result_text = soup.get_text()
             raw_result_text = re.sub("\n", " ", str(raw_result_text))
 
-            # NLP
+            ###### NLP setup
             tokenized = tokenize.sent_tokenize(raw_result_text)
             sid = SentimentIntensityAnalyzer()
             data = []
 
+            ####### Clean(tokenized)
             # Remove too lengthy sentences (understood to be errors)
             line_list = list(filter(lambda x: len(str(x)) < 400, tokenized))
-            # line_list = list(filter(lambda x: len(str(x)) > 20, line_list))  use to give min length
 
+            ####### NLP in action
             # Get polarity of each sentence
             for sentence in line_list:
                 ss = sid.polarity_scores(sentence)
                 data.append(ss)
 
-            # Combine sentances and sentence scores
+            # Add sentence id and sentence
             for i in range(len(line_list)):
-                data[i].update({i: line_list[i]})
+                data[i].update({'id': i})
+                data[i].update({'text': line_list[i]})
 
-            # Get num of +/- compound
+            ###### Get most/least stats 
+            # Get number of +/- of compound rating
             count_pos = list(filter(lambda x: x['compound'] >= 0, data))
             count_neg = list(filter(lambda x: x['compound'] < 0, data))
             count_pos_comp = len(count_pos)
@@ -56,22 +60,23 @@ def scrape():
             count_pos_perc = round(count_pos_comp / count_total * 100, 2)
             count_neg_perc = round(count_neg_comp / count_total * 100, 2)
 
-            # Most/Least values
-            most_negative = sorted(data, key=lambda x: x['neg'])
-            most_neg = most_negative[((len(data) -1))]
-            neg_comp_sorted = sorted(data, key=lambda x: x['compound'], reverse=True)
-            most_negative_comp_full = dict(neg_comp_sorted[((len(data)-1))])
-            most_negative_comp_reduced = dict(neg_comp_sorted[((len(data)-1))])
-            for key in ['neg', 'neu', 'pos', 'compound']:
-                most_negative_comp_reduced.pop(key)
+            # Get most positive/negative sentences
+            most_negative_sorted = sorted(data, key=lambda x: x['neg'])
+            most_neg = most_negative_sorted[((len(data)-1))]['text']
+            most_neg_id = int(most_negative_sorted[((len(data)-1))]['id'])
+            most_positive_sorted = sorted(data, key=lambda x: x['pos'])
+            most_pos = most_positive_sorted[((len(data)-1))]['text']
+            most_pos_id = int(most_positive_sorted[((len(data)-1))]['id'])
 
-            most_positive = sorted(data, key=lambda x: x['pos'])
-            most_pos = most_positive[((len(data) -1))]
-            pos_comp_sorted = sorted(data, key=lambda x: x['compound'])
-            most_positive_comp_full = dict(pos_comp_sorted[((len(data)-1))])
-            most_positive_comp_reduced = dict(pos_comp_sorted[((len(data)-1))])
-            for key in ['neg', 'neu', 'pos', 'compound']:
-                most_positive_comp_reduced.pop(key)
+            # pre/post neg & pos text
+            pre_neg = data[(most_neg_id - 1)]
+            pre_neg_text = pre_neg['text']
+            post_neg = data[(most_neg_id + 1)]
+            post_neg_text = post_neg['text']
+            pre_pos = data[(most_pos_id - 1)]
+            pre_pos_text = pre_pos['text']
+            post_pos = data[(most_pos_id + 1)]
+            post_pos_text = post_pos['text']
 
 
     return render_template('index.html', **locals())

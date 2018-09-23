@@ -8,52 +8,47 @@
 </head>
 
 <body>
-
-<div class="container">
-    <div class="jumbotron">
-  <h2 class="display-4">Sentiment Analyser</h2>
-  <form action="{{ url_for('scrape') }}" method="POST">
-        <input type="text" name="urlInput">
-        <button type="submit" class="btn btn-primary">Analyse</button>
-    </form>
-    {% if url %} URL requested: {{ url }} {% endif %}
-    {% if count_total %}
-    Analysis of: {{ url }}
-<hr class="my-2">
-<div class="progress">
-  <div class="progress-bar bg-success" style="width:{{ count_pos_perc }}%">
-    Positive - {{ count_pos_perc }}%
-  </div>
-  <div class="progress-bar bg-danger" style="width:{{ count_neg_perc }}%"> Negative - {{ count_neg_perc }}%
-</div>
-</div>
-
-  <br> <b>Total:</b> {{ count_total }}
-    <br> <b># of positive:</b> {{ count_pos_comp }}
-
-    <br> <b>Most compound positive comment:</b> {% for key, value in most_positive_comp_reduced.items() %} {{ value }} {% endfor %}
-    <br> <b> Most comp pos full:</b> {{ most_positive_comp_full }}
-    <br> <b>Most positive:</b> {{ most_pos }}
-    <br>
-    <br> <b># of negative:</b> {{ count_neg_comp }}
-    <br> <b>Most compound negative comment:</b> {% for key, value in most_negative_comp_reduced.items() %} {{ value }} {% endfor %}
-    <br> <b>Most comp neg full:</b> {{ most_negative_comp_full }}
-    <br> <b>Most negative:</b> {{ most_neg }}
-    
-    {% endif %}
-    <br> {% if errors %}
-    <div class="alert alert-warning" role="alert">
-  {{ errors }} 
-</div> {% endif %}
-</div>
-</div>
-    
+    <div class="container">
+        <div class="jumbotron">
+            <h2 class="display-4">Sentiment Analyser</h2>
+            <p>English, sentence by sentence, based on -nlp lib-, link to github, </p>
+            <form action="{{ url_for('scrape') }}" method="POST">
+                <input type="text" placeholder="Enter URL to analyse" name="urlInput">
+                <button type="submit" class="btn btn-primary">Analyse</button>
+            </form>
+            {% if url %} URL requested: <a href="{{ url }}">{{ url }}</a> {% endif %} {% if count_total %}
+            <hr class="my-2">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:{{ count_pos_perc }}%">
+                    Positive - {{ count_pos_perc }}%
+                </div>
+                <div class="progress-bar bg-danger" style="width:{{ count_neg_perc }}%"> Negative - {{ count_neg_perc }}%
+                </div>
+            </div>
+            <br> <b>Total:</b> {{ count_total }}
+            <b># of positive:</b> {{ count_pos_comp }}
+            <b># of negative:</b> {{ count_neg_comp }}
+            <br>
+            <br> Pre pos: {{ pre_pos_text }}
+            <br> <b>Most positive:</b> {{ most_pos }}
+            <br> Post pos: {{ post_pos_text }}
+            <br>
+            <br> Pre neg: {{ pre_neg_text }}
+            <br> <b>Most negative:</b> {{ most_neg }}
+            <br> Post neg: {{ post_neg_text }}
+             {% endif %}
+            <br> {% if errors %}
+            <div class="alert alert-warning" role="alert">
+                {{ errors }}
+            </div> {% endif %}
+        </div>
+    </div>
     <br> TODO:
-    <br> ?plot neg/neu/pos on chart per page -
-    <br> ?average n/n/p of lines per page
-    <br> Apply to Trek scripts (with better page scope) - can get info by character
-    <br> Set min word in sentence count
-    <br> save results to db, url + metrics (could check certain pages over time)
+    <br> ?add neutral in bar
+    <br> ?average neg/n/p of lines per page (could plot whole page 'flow' and/or )
+    <br> add tests
+    <br> clean py file (add comments, docstring) refactor as required
+    <br> readme (limitations, doesnt work on reddit?)
 </body>
 
 </html>
