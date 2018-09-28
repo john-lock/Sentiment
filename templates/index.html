@@ -11,7 +11,7 @@
     <div class="container">
         <div class="jumbotron">
             <h2 class="display-4">Sentiment Analyser</h2>
-            <p>English, sentence by sentence, based on -nlp lib- </p>
+            
             <form action="{{ url_for('scrape') }}" method="POST">
                 <input type="text" placeholder="Enter URL to analyse" name="urlInput">
                 <button type="submit" class="btn btn-primary">Analyse</button>
@@ -32,16 +32,20 @@
             <br> Pre pos: {{ pre_pos_text }}
             <br> <b>Most positive:</b> {{ most_pos }}
             <br> Post pos: {{ post_pos_text }}
+            <br>Score:{{ most_pos_score }}
             <br>
             <br> Pre neg: {{ pre_neg_text }}
             <br> <b>Most negative:</b> {{ most_neg }}
-            <br> Post neg: {{ post_neg_text }} {% endif %}
+            <br> Post neg: {{ post_neg_text }}
+            <br>Score: {{ most_neg_score }}
+
+             {% endif %}
             <br> {% if errors %}
             <div class="alert alert-warning" role="alert">
                 {{ errors }}
             </div> {% endif %}
         </div>
-        View on Github <span> link to me info </span>
+        View on Github <a href="https://github.com/john-lock/sentiment"><img src="static/images/github.png"></a>
     </div>
 </body>
 

@@ -55,7 +55,6 @@ def scrape():
             count_pos_perc = round(count_pos_comp / count_total * 100, 2)
             count_neg_perc = round(count_neg_comp / count_total * 100, 2)
 
-
             # Get most positive/negative sentences
             most_negative_sorted = sorted(data, key=lambda x: x['neg'])
             most_neg = most_negative_sorted[((len(data)-1))]['text']
@@ -65,14 +64,25 @@ def scrape():
             most_pos_id = int(most_positive_sorted[((len(data)-1))]['id'])
 
             # pre/post neg & pos text
-            pre_neg = data[(most_neg_id - 1)]
-            pre_neg_text = pre_neg['text']
-            post_neg = data[(most_neg_id + 1)]
-            post_neg_text = post_neg['text']
-            pre_pos = data[(most_pos_id - 1)]
-            pre_pos_text = pre_pos['text']
-            post_pos = data[(most_pos_id + 1)]
-            post_pos_text = post_pos['text']
+            if most_neg_id > 1:
+                pre_neg = data[(most_neg_id - 1)]
+                pre_neg_text = pre_neg['text']
+
+            if (most_neg_id + 1) < len(data):
+                post_neg = data[(most_neg_id + 1)]
+                post_neg_text = post_neg['text']
+
+            if most_pos_id > 1:
+                pre_pos = data[(most_pos_id - 1)]
+                pre_pos_text = pre_pos['text']
+
+            if (most_pos_id + 1) < len(data):
+                post_pos = data[(most_pos_id + 1)]
+                post_pos_text = post_pos['text']
+
+            # Scores of most neg & pos sentences
+            most_neg_score = data[(most_neg_id)]['compound']
+            most_pos_score = data[(most_pos_id)]['compound']
 
     return render_template('index.html', **locals())
 
