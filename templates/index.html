@@ -11,12 +11,12 @@
     <div class="container">
         <div class="jumbotron">
             <h2 class="display-4">Sentiment Analyser</h2>
-            <p>English, sentence by sentence, based on -nlp lib-, link to github, </p>
+            <p>English, sentence by sentence, based on -nlp lib- </p>
             <form action="{{ url_for('scrape') }}" method="POST">
                 <input type="text" placeholder="Enter URL to analyse" name="urlInput">
                 <button type="submit" class="btn btn-primary">Analyse</button>
             </form>
-            {% if url %} URL requested: <a href="{{ url }}">{{ url }}</a> {% endif %} {% if count_total %}
+            {% if url %} Analysis of: <a href="{{ url }}">{{ url }}</a> {% endif %} {% if count_total %}
             <hr class="my-2">
             <div class="progress">
                 <div class="progress-bar bg-success" style="width:{{ count_pos_perc }}%">
@@ -35,20 +35,14 @@
             <br>
             <br> Pre neg: {{ pre_neg_text }}
             <br> <b>Most negative:</b> {{ most_neg }}
-            <br> Post neg: {{ post_neg_text }}
-             {% endif %}
+            <br> Post neg: {{ post_neg_text }} {% endif %}
             <br> {% if errors %}
             <div class="alert alert-warning" role="alert">
                 {{ errors }}
             </div> {% endif %}
         </div>
+        View on Github <span> link to me info </span>
     </div>
-    <br> TODO:
-    <br> ?add neutral in bar
-    <br> ?average neg/n/p of lines per page (could plot whole page 'flow' and/or )
-    <br> add tests
-    <br> clean py file (add comments, docstring) refactor as required
-    <br> readme (limitations, doesnt work on reddit?)
 </body>
 
 </html>

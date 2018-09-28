@@ -1,7 +1,12 @@
- TODO: 
- Apply to Trek scripts (with better page scope) - can get info by character
- Visualize count count and pos/neg counts 
- Save results to db, url + metrics (could check certain pages over time)
- 
- ? plot neg/neu/pos on chart per page
- ? average n/n/p of lines per page
+
+Description:
+Able to analyse the visible text on a given web page
+
+
+
+Known Limitations: issue working with reddit (text not being read), most neg/pos sometimes is poor
+
+TODO: 
+Plot +/n/- per page, line by line and/or sorted 
+?add neutral in bar 
+add tests

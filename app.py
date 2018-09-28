@@ -22,7 +22,6 @@ def scrape():
             errors_str = '\n'.join(errors)
             return render_template('index.html', errors=errors, url=url)
         if r:
-            ###### Visible(r):
             # Remove elements that are not visible on page as rendered to user
             soup = BeautifulSoup(r.text, 'html.parser')
             for element in soup(['style', 'script', 'head', 'header', 'title', 'meta', 'footer']):
@@ -30,16 +29,13 @@ def scrape():
             raw_result_text = soup.get_text()
             raw_result_text = re.sub("\n", " ", str(raw_result_text))
 
-            ###### NLP setup
             tokenized = tokenize.sent_tokenize(raw_result_text)
             sid = SentimentIntensityAnalyzer()
             data = []
 
-            ####### Clean(tokenized)
             # Remove too lengthy sentences (understood to be errors)
             line_list = list(filter(lambda x: len(str(x)) < 400, tokenized))
 
-            ####### NLP in action
             # Get polarity of each sentence
             for sentence in line_list:
                 ss = sid.polarity_scores(sentence)
@@ -50,7 +46,6 @@ def scrape():
                 data[i].update({'id': i})
                 data[i].update({'text': line_list[i]})
 
-            ###### Get most/least stats 
             # Get number of +/- of compound rating
             count_pos = list(filter(lambda x: x['compound'] >= 0, data))
             count_neg = list(filter(lambda x: x['compound'] < 0, data))
@@ -59,6 +54,7 @@ def scrape():
             count_total = len(data)
             count_pos_perc = round(count_pos_comp / count_total * 100, 2)
             count_neg_perc = round(count_neg_comp / count_total * 100, 2)
+
 
             # Get most positive/negative sentences
             most_negative_sorted = sorted(data, key=lambda x: x['neg'])
@@ -77,7 +73,6 @@ def scrape():
             pre_pos_text = pre_pos['text']
             post_pos = data[(most_pos_id + 1)]
             post_pos_text = post_pos['text']
-
 
     return render_template('index.html', **locals())
 
