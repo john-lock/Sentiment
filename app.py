@@ -86,8 +86,11 @@ def scrape():
 
     return render_template('index.html', **locals())
 
+
 @app.route('/test')
+def testpage():
     return render_template('test.html')
+
 
 if __name__ == '__main__':
     app.run(port=5001)
