@@ -87,9 +87,14 @@ def scrape():
     return render_template('index.html', **locals())
 
 
-@app.route('/test')
-def testpage():
+@app.route('/test.html')
+def test():
     return render_template('test.html')
+
+
+def create_app():
+    app = Flask(__name__)
+    return app
 
 
 if __name__ == '__main__':
