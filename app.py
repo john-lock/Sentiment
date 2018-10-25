@@ -1,5 +1,5 @@
 import re
-from nltk import tokenize, sent_tokenize
+from nltk import tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from flask import Flask, render_template, request
 import requests
