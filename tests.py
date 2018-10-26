@@ -8,16 +8,16 @@ class Test(unittest.TestCase):
         self.app = app.create_app()
 
     def testpage(self):
-        url = 'https://sentiment.johnlock.nl/test'
+        url = 'https://sentiment.johnlock.nl/testpage'
         response = requests.get(url)
         print(response.text)
         # self.assertEqual(,response.text)
 
     def test_score(self):
-        data = {'urlInput': 'https://sentiment.johnlock.nl/test'}
-        post_response = requests.post(url='https://sentiment.johnlock.nl', data=data)
-        print(post_response)
-        return post_response
+        url = 'https://sentiment.johnlock.nl/test'
+        response = requests.get(url)
+        print(response)
+        return response
 
 
 if __name__ == '__main__':
