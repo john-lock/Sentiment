@@ -2,24 +2,27 @@ import unittest
 import requests
 import app
 
-#app.create_app()
 
 class Test(unittest.TestCase):
     def setUp(self):
         self.app = app.create_app()
 
-    def test_testpage_score(self):
-        url = 'http://jl-.herokuapp.com/test.html'
+    def testpage(self):
+        url = 'https://sentiment.johnlock.nl/test'
         response = requests.get(url)
         print(response.text)
-        # self.assertEqaul(,response.text)
+        # self.assertEqual(,response.text)
 
-    #def test_testpage_  (self)
+    def test_score(self):
+        data = {'urlInput': 'https://sentiment.johnlock.nl/test'}
+        post_response = requests.post(url='https://sentiment.johnlock.nl', data=data)
+        print(post_response)
+        return post_response
+
 
 if __name__ == '__main__':
     unittest.main()
 
 
-## fill test page with a copy of something
 # test can get scores
 # test front end if possible

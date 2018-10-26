@@ -87,7 +87,7 @@ def scrape():
     return render_template('index.html', **locals())
 
 
-@app.route('/test.html')
+@app.route('/test')
 def test():
     return render_template('test.html')
 
@@ -98,4 +98,4 @@ def create_app():
 
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run()
