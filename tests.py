@@ -13,12 +13,6 @@ class Test(unittest.TestCase):
         print(response.text)
         # self.assertEqual(,response.text)
 
-    def test_score(self):
-        url = 'https://sentiment.johnlock.nl/test'
-        response = requests.get(url)
-        print(response)
-        return response
-
 
 if __name__ == '__main__':
     unittest.main()

@@ -2,52 +2,141 @@
 
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/sentiment.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
     <title>Sentiment Analysis</title>
 </head>
 
 <body>
     <div class="container">
         <div class="jumbotron">
-            <h2 class="display-4">Sentiment Analyser</h2>
+            <br> {% if errors %}
+            <div class="alert alert-warning" role="alert">
+                {{ errors }}
+            </div> {% endif %}
+            <h2 class="display-6">Sentiment Analyser</h2>
             <form action="{{ url_for('scrape') }}" method="POST">
                 <input type="text" placeholder="Enter URL to analyse" name="urlInput">
                 <button type="submit" class="btn btn-primary">Analyse</button>
             </form>
             <p> Enter a URL and you will be provided with a score of the overall postivity and negativity of the sentences detected on the page. </p>
-            <br>
-            {% if url %} Analysis of: <a href="{{ url }}">{{ url }}</a> {% endif %} {% if count_total %}
+            {% if count_total %}
             <hr class="my-2">
-            <div class="progress">
-                <div class="progress-bar bg-success" style="width:{{ count_pos_perc }}%">
-                    Positive - {{ count_pos_perc }}%
-                </div>
-                <div class="progress-bar bg-danger" style="width:{{ count_neg_perc }}%"> Negative - {{ count_neg_perc }}%
-                </div>
-            </div>
-            <br> <b>Total:</b> {{ count_total }}
-            <b># of positive:</b> {{ count_pos_comp }}
-            <b># of negative:</b> {{ count_neg_comp }}
-            <br>
-            <br> Pre pos: {{ pre_pos_text }}
+            <canvas id="chart" width="600" height="400"></canvas>
+            <hr>
+            
             <br> <b>Most positive:</b> {{ most_pos }}
-            <br> Post pos: {{ post_pos_text }}
             <br>Score:{{ most_pos_score }}
             <br>
-            <br> Pre neg: {{ pre_neg_text }}
             <br> <b>Most negative:</b> {{ most_neg }}
-            <br> Post neg: {{ post_neg_text }}
             <br>Score: {{ most_neg_score }}
+            <hr>
+            Overall page composition stats
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:{{ count_pos_perc }}%">
+                    {% if count_pos_perc > 10 %}
+                    Positive -
+                    {% endif %}
+                    {{ count_pos_perc }}%
+                </div>
+                <div class="progress-bar bg-light" style="color:black; width:{{ count_neut_perc }}%">
+                    {% if count_neut_perc > 10 %}
+                    Neutral -
+                    {% endif %}
+                    {{ count_neut_perc }}%
+                </div>
+                <div class="progress-bar bg-danger" style="width:{{ count_neg_perc }}%">
+                    {% if count_neg_perc > 10 %}
+                    Negative -
+                    {% endif %}
+                    {{ count_neg_perc }}%
+                </div>
+            </div>
+            <br> <b>Total sentences found:</b> {{ count_total }}
+            <b>Positive:</b> {{ count_pos_comp }}
+            <b>Neutral:</b> {{ count_neut_comp }}
+            <b>Negative:</b> {{ count_neg_comp }}
+            <br><br>
+            <div class="accordion" id="accordionExample">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+          Click to show full breakdown
+        </button>
+      </h5>
+                    </div>
+                    <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Positive</th>
+                                        <th>Neutral</th>
+                                        <th>Negative</th>
+                                        <th>Compound</th>
+                                        <th class="text-center">Text</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for sentence in data %}
+                                    <tr>
+                                        <td>{{ sentence.id }}</td>
+                                        <td>{{ sentence.pos }}</td>
+                                        <td>{{ sentence.neu }}</td>
+                                        <td>{{ sentence.neg }}</td>
+                                        <td>{{ sentence.compound }}</td>
+                                        <td>{{ sentence.text }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endif %}
-            <br> {% if errors %}
-            <div class="alert alert-warning" role="alert">
-                {{ errors }}
-            </div> {% endif %}
         </div>
         View on Github <a href="https://github.com/john-lock/sentiment"><img src="static/images/github.png"></a>
     </div>
+    <script>
+    var id = [{% for token in data %} {{ token.id }},{% endfor %}];
+    var compound = [{% for token in data %} {{ token.compound }},{% endfor %}];
+    new Chart(document.getElementById("chart"), {
+  type: 'line',
+  data: {
+    labels: id,
+    datasets: [{ 
+        data: compound,
+        label: "Sentence compound score",
+        borderColor: "#3e95cd",
+        fill: false
+      }]},
+  options: {
+     title: {
+      display: true,
+      text: 'Sentiment analysis of {{ url }}'
+      },
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Compound Sentiment'
+          }
+        }],
+        xAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Sentence number'
+          }
+        }],
+      }},
+    });
+    </script>
 </body>
 
 </html>
