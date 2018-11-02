@@ -1,5 +1,5 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en-gb">
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="static/sentiment.css">
@@ -18,7 +18,7 @@
                 {{ errors }}
             </div> {% endif %}
             <h2 class="display-6">Sentiment Analyser</h2>
-            <form action="{{ url_for('scrape') }}" method="POST">
+            <form action="{{ url_for('analysis') }}" method="POST">
                 <input type="text" placeholder="Enter URL to analyse" name="urlInput">
                 <button type="submit" class="btn btn-primary">Analyse</button>
             </form>
@@ -28,10 +28,10 @@
             <canvas id="chart" width="600" height="400"></canvas>
             <hr>
             
-            <br> <b>Most positive:</b> {{ most_pos }}
+            <br> <b>Most positive:</b> {{ most_pos_txt }}
             <br>Score:{{ most_pos_score }}
             <br>
-            <br> <b>Most negative:</b> {{ most_neg }}
+            <br> <b>Most negative:</b> {{ most_neg_txt }}
             <br>Score: {{ most_neg_score }}
             <hr>
             Overall page composition stats
