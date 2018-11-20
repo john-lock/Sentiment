@@ -27,15 +27,16 @@
             <hr class="my-2">
             <canvas id="chart" width="600" height="400"></canvas>
             <hr>
-            
+            <div id="most_sentences" class="container">
             <br> <b>Most positive:</b> {{ most_pos_txt }}
             <br>Score:{{ most_pos_score }}
             <br>
             <br> <b>Most negative:</b> {{ most_neg_txt }}
             <br>Score: {{ most_neg_score }}
             <hr>
+        </div>
             Overall page composition stats
-            <div class="progress">
+            <div class="progress" id="progress_bar">
                 <div class="progress-bar bg-success" style="width:{{ count_pos_perc }}%">
                     {% if count_pos_perc > 10 %}
                     Positive -
