@@ -6,19 +6,20 @@ The resulting text is then broken down into sentences, known as Tokenizing, and 
 
 # Setup & Installation
 To setup this for yourself:
-- Git clone https://github.com/john-lock/Sentiment.git
-- Setup virtualenv with 'virtualenv venv' then activate with 'source venv/bin/activate'
-- Install the requirements with 'pip install -r requirements.txt'
-- Add NLTK Corpus, via a python shell
+- `git clone https://github.com/john-lock/Sentiment.git`
+- Setup virtualenv with `virtualenv venv` then activate with `source venv/bin/activate`
+- Install the requirements with `pip install -r requirements.txt`
+- Add NLTK Corpus, via a python shell:
+```python
 >>> import nltk
 >>> nltk.download('punkt')
 >>> nltk.download('vader_lexicon')
-- Run the application with 'flask run'
+```
+- Run the application with `flask run`
 
 
 
 # TODO
 - Update tests to Pytest
 - Add document upload function
-
-
+- Expand output of analysis with more detail as to why some text is positive/negative
